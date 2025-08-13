@@ -1,14 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bill Generator - Professional Invoice Creator</title>
-    <script type="module" crossorigin src="/assets/index-B3UNRicM.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CROWchV0.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bill Generator</h1>
+        <div class="form-section">
+            <div class="input-group">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName">
+            </div>
+            <div class="input-group">
+                <label for="clientName">Client Name:</label>
+                <input type="text" id="clientName">
+            </div>
+            <div class="input-group">
+                <label for="invoiceNumber">Invoice Number:</label>
+                <input type="text" id="invoiceNumber">
+            </div>
+            <div class="input-group">
+                <label for="invoiceDate">Invoice Date:</label>
+                <input type="date" id="invoiceDate">
+            </div>
+            <div class="input-group">
+                <label for="logoUpload">Upload Logo:</label>
+                <input type="file" id="logoUpload" accept="image/*">
+                <img id="logoPreview" src="" alt="Logo Preview" style="max-width: 100px; max-height: 100px; display: none;">
+            </div>
+            <div class="input-group">
+                <label for="templateSelect">Select Template:</label>
+                <select id="templateSelect">
+                    <option value="modern">Modern</option>
+                    <option value="classic">Classic</option>
+                    <option value="minimal">Minimal</option>
+                </select>
+            </div>
+            <button id="generatePdf">Generate PDF</button>
+        </div>
+        <div class="preview-section">
+            <h2>Invoice Preview</h2>
+            <div id="invoicePreview" class="invoice-template modern">
+                <!-- Invoice content will be generated here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>
+

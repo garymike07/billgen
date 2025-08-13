@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const logoUploadInput = document.getElementById("logoUpload");
     const logoPreview = document.getElementById("logoPreview");
     const templateSelect = document.getElementById("templateSelect");
+    const currencySelect = document.getElementById("currencySelect");
     const generatePdfBtn = document.getElementById("generatePdf");
     const invoicePreview = document.getElementById("invoicePreview");
     const addItemBtn = document.getElementById("addItemBtn");
@@ -21,6 +22,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const invoiceDate = invoiceDateInput.value;
         const barcodeData = barcodeDataInput.value;
         const selectedTemplate = templateSelect.value;
+        const selectedCurrency = currencySelect.value;
+
+        const currencySymbols = {
+            USD: "$",
+            KES: "Ksh",
+        };
+        const currencySymbol = currencySymbols[selectedCurrency] || "$";
+
+        const generationTimestamp = new Date().toLocaleString();
 
         invoicePreview.className = `invoice-template ${selectedTemplate}`;
 
@@ -44,8 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 <tr>
                     <td>${description || "Item"}</td>
                     <td>${quantity}</td>
-                    <td>${rate.toFixed(2)}</td>
-                    <td>${amount.toFixed(2)}</td>
+                    <td>${currencySymbol}${rate.toFixed(2)}</td>
+                    <td>${currencySymbol}${amount.toFixed(2)}</td>
                 </tr>
             `;
         });
@@ -92,14 +102,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 </table>
             </div>
             <div class="total">
-                <p><strong>Total:</strong> $${totalAmount.toFixed(2)}</p>
+                <p><strong>Total:</strong> ${currencySymbol}${totalAmount.toFixed(2)}</p>
             </div>
             <div class="footer">
-                <div class="barcode-container">
-                    <svg id="barcode"></svg>
+                <div class="timestamp">
+                    <p>Generated on: ${generationTimestamp}</p>
                 </div>
-                <div class="qrcode-container">
-                    <canvas id="qrcode"></canvas>
+                <div class="codes">
+                    <div class="barcode-container">
+                        <svg id="barcode"></svg>
+                    </div>
+                    <div class="qrcode-container">
+                        <canvas id="qrcode"></canvas>
+                    </div>
                 </div>
             </div>
         `;
@@ -167,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     invoiceDateInput.addEventListener("input", updateInvoicePreview);
     barcodeDataInput.addEventListener("input", updateInvoicePreview);
     templateSelect.addEventListener("change", updateInvoicePreview);
+    currencySelect.addEventListener("change", updateInvoicePreview);
     addItemBtn.addEventListener("click", addItemRow);
 
     logoUploadInput.addEventListener("change", (event) => {
@@ -212,6 +228,31 @@ document.addEventListener("DOMContentLoaded", () => {
             pdf.save("invoice.pdf");
         });
     });
+
+    // Theme Switcher Logic
+    const themeToggle = document.getElementById("themeToggle");
+    const docElement = document.documentElement;
+
+    const applyTheme = (theme) => {
+        docElement.dataset.theme = theme;
+        localStorage.setItem("theme", theme);
+    };
+
+    themeToggle.addEventListener("click", () => {
+        const currentTheme = docElement.dataset.theme === "dark" ? "light" : "dark";
+        applyTheme(currentTheme);
+    });
+
+    // On page load, apply saved theme or default to system preference
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else if (prefersDark) {
+        applyTheme("dark");
+    } else {
+        applyTheme("light");
+    }
 
     // Initial preview update and one item row
     addItemRow();

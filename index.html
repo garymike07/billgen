@@ -11,6 +11,9 @@
 <body>
     <div class="container">
         <h1>Bill Generator</h1>
+        <div class="theme-switcher">
+            <button id="themeToggle">Toggle Theme</button>
+        </div>
         <div class="form-section">
             <div class="input-group">
                 <label for="companyName">Company Name:</label>
@@ -45,6 +48,13 @@
                 <label for="logoUpload">Upload Logo:</label>
                 <input type="file" id="logoUpload" accept="image/*">
                 <img id="logoPreview" src="" alt="Logo Preview" style="max-width: 100px; max-height: 100px; display: none;">
+            </div>
+            <div class="input-group">
+                <label for="currencySelect">Select Currency:</label>
+                <select id="currencySelect">
+                    <option value="USD">US Dollar ($)</option>
+                    <option value="KES">Kenya Shilling (Ksh)</option>
+                </select>
             </div>
             <div class="input-group">
                 <label for="templateSelect">Select Template:</label>

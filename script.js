@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const clientNameInput = document.getElementById("clientName");
     const invoiceNumberInput = document.getElementById("invoiceNumber");
     const invoiceDateInput = document.getElementById("invoiceDate");
+    const barcodeDataInput = document.getElementById("barcodeData");
     const logoUploadInput = document.getElementById("logoUpload");
     const logoPreview = document.getElementById("logoPreview");
     const templateSelect = document.getElementById("templateSelect");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const clientName = clientNameInput.value;
         const invoiceNumber = invoiceNumberInput.value;
         const invoiceDate = invoiceDateInput.value;
+        const barcodeData = barcodeDataInput.value;
         const selectedTemplate = templateSelect.value;
 
         invoicePreview.className = `invoice-template ${selectedTemplate}`;
@@ -92,7 +94,47 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="total">
                 <p><strong>Total:</strong> $${totalAmount.toFixed(2)}</p>
             </div>
+            <div class="footer">
+                <div class="barcode-container">
+                    <svg id="barcode"></svg>
+                </div>
+                <div class="qrcode-container">
+                    <canvas id="qrcode"></canvas>
+                </div>
+            </div>
         `;
+
+        // Generate Barcode and QR Code
+        if (barcodeData) {
+            try {
+                JsBarcode("#barcode", barcodeData, {
+                    format: "CODE128",
+                    displayValue: false,
+                    margin: 0,
+                    width: 1,
+                    height: 50
+                });
+                document.querySelector(".barcode-container").style.display = "block";
+            } catch (e) {
+                console.error("Barcode generation failed:", e);
+                document.querySelector(".barcode-container").style.display = "none";
+            }
+
+            try {
+                QRCode.toCanvas(document.getElementById("qrcode"), barcodeData, { width: 100 }, (error) => {
+                    if (error) console.error("QR Code generation failed:", error);
+                    else {
+                        document.querySelector(".qrcode-container").style.display = "block";
+                    }
+                });
+            } catch (e) {
+                console.error("QR Code generation failed:", e);
+                document.querySelector(".qrcode-container").style.display = "none";
+            }
+        } else {
+            document.querySelector(".barcode-container").style.display = "none";
+            document.querySelector(".qrcode-container").style.display = "none";
+        }
     };
 
     const addItemRow = () => {
@@ -123,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clientNameInput.addEventListener("input", updateInvoicePreview);
     invoiceNumberInput.addEventListener("input", updateInvoicePreview);
     invoiceDateInput.addEventListener("input", updateInvoicePreview);
+    barcodeDataInput.addEventListener("input", updateInvoicePreview);
     templateSelect.addEventListener("change", updateInvoicePreview);
     addItemBtn.addEventListener("click", addItemRow);
 

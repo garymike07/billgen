@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bill Generator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -21,6 +23,10 @@
             <div class="input-group">
                 <label for="invoiceNumber">Invoice Number:</label>
                 <input type="text" id="invoiceNumber">
+            </div>
+            <div class="input-group">
+                <label for="barcodeData">Data for Barcode/QR Code:</label>
+                <input type="text" id="barcodeData" placeholder="e.g., Invoice Number or a URL">
             </div>
             <div class="input-group">
                 <label for="invoiceDate">Invoice Date:</label>
@@ -46,6 +52,12 @@
                     <option value="modern">Modern</option>
                     <option value="classic">Classic</option>
                     <option value="minimal">Minimal</option>
+                    <option value="professional">Professional</option>
+                    <option value="elegant">Elegant</option>
+                    <option value="creative">Creative</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="simple">Simple</option>
+                    <option value="technical">Technical</option>
                 </select>
             </div>
             <button id="generatePdf">Generate PDF</button>
@@ -63,4 +75,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-

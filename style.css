@@ -271,9 +271,48 @@ button:hover {
     padding: 5px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .container {
         flex-direction: column;
+        padding: 10px;
+    }
+
+    .form-section, .preview-section {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .form-section, .preview-section {
+        padding: 10px;
+    }
+
+    .item-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .item-row input {
+        width: 100%;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .barcode-container,
+    .qrcode-container {
+        max-width: 100%;
     }
 }
 

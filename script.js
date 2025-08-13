@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let logoHtml = "";
         if (logoDataUrl) {
-            logoHtml = `<img src="${logoDataUrl}" alt="Company Logo">`;
+            logoHtml = `<img src="${logoDataUrl}" alt="Company Logo" class="company-logo">`;
         }
 
         let itemsHtml = "";

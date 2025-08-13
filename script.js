@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const templateSelect = document.getElementById("templateSelect");
     const generatePdfBtn = document.getElementById("generatePdf");
     const invoicePreview = document.getElementById("invoicePreview");
+    const addItemBtn = document.getElementById("addItemBtn");
+    const itemRowsContainer = document.getElementById("item-rows");
 
     let logoDataUrl = null;
 
@@ -23,6 +25,35 @@ document.addEventListener("DOMContentLoaded", () => {
         let logoHtml = "";
         if (logoDataUrl) {
             logoHtml = `<img src="${logoDataUrl}" alt="Company Logo">`;
+        }
+
+        let itemsHtml = "";
+        let totalAmount = 0;
+        const itemRows = itemRowsContainer.querySelectorAll(".item-row");
+
+        itemRows.forEach(row => {
+            const description = row.querySelector(".item-description").value;
+            const quantity = parseFloat(row.querySelector(".item-quantity").value) || 0;
+            const rate = parseFloat(row.querySelector(".item-rate").value) || 0;
+            const amount = quantity * rate;
+            totalAmount += amount;
+
+            itemsHtml += `
+                <tr>
+                    <td>${description || "Item"}</td>
+                    <td>${quantity}</td>
+                    <td>${rate.toFixed(2)}</td>
+                    <td>${amount.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        if (itemRows.length === 0) {
+            itemsHtml = `
+                <tr>
+                    <td colspan="4">No items added.</td>
+                </tr>
+            `;
         }
 
         invoicePreview.innerHTML = `
@@ -54,19 +85,37 @@ document.addEventListener("DOMContentLoaded", () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Item 1</td>
-                            <td>1</td>
-                            <td>100</td>
-                            <td>100</td>
-                        </tr>
+                        ${itemsHtml}
                     </tbody>
                 </table>
             </div>
             <div class="total">
-                <p><strong>Total:</strong> $100</p>
+                <p><strong>Total:</strong> $${totalAmount.toFixed(2)}</p>
             </div>
         `;
+    };
+
+    const addItemRow = () => {
+        const itemRow = document.createElement("div");
+        itemRow.classList.add("item-row");
+        itemRow.innerHTML = `
+            <input type="text" class="item-description" placeholder="Item Description">
+            <input type="number" class="item-quantity" placeholder="Quantity" value="1">
+            <input type="number" class="item-rate" placeholder="Rate" value="0">
+            <button type="button" class="remove-item-btn">-</button>
+        `;
+        itemRowsContainer.appendChild(itemRow);
+
+        itemRow.querySelector(".remove-item-btn").addEventListener("click", () => {
+            itemRow.remove();
+            updateInvoicePreview();
+        });
+
+        itemRow.querySelectorAll("input").forEach(input => {
+            input.addEventListener("input", updateInvoicePreview);
+        });
+
+        updateInvoicePreview();
     };
 
     // Event Listeners
@@ -75,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     invoiceNumberInput.addEventListener("input", updateInvoicePreview);
     invoiceDateInput.addEventListener("input", updateInvoicePreview);
     templateSelect.addEventListener("change", updateInvoicePreview);
+    addItemBtn.addEventListener("click", addItemRow);
 
     logoUploadInput.addEventListener("change", (event) => {
         const file = event.target.files[0];
@@ -120,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Initial preview update
-    updateInvoicePreview();
+    // Initial preview update and one item row
+    addItemRow();
 });
-
